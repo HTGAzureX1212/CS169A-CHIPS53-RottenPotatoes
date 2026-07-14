@@ -8,8 +8,12 @@ class Movie < ApplicationRecord
       Movie.all
     else
       Movie.where(rating: ratings)
-           end
+    end
 
-    list.order(order_by => :asc)
+    if order_by.nil?
+      list
+    else
+      list.order(order_by => :asc)
+    end
   end
 end
