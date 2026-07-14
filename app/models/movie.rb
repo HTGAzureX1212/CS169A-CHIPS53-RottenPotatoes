@@ -3,11 +3,13 @@ class Movie < ApplicationRecord
     Movie.distinct.pluck(:rating)
   end
 
-  def self.with_ratings(ratings)
-    if ratings.nil? || ratings.empty?
+  def self.with_ratings(ratings, order_by)
+    list = if ratings.nil? || ratings.empty?
       Movie.all
     else
       Movie.where(rating: ratings)
-    end
+           end
+
+    list.order(order_by => :asc)
   end
 end
