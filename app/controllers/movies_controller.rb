@@ -3,9 +3,19 @@ class MoviesController < ApplicationController
 
   # GET /movies or /movies.json
   def index
+    config_params = params.permit(:sort_by, ratings: {}).to_h.with_indifferent_access
+
+    if config_params.present?
+      session[:index_config] = config_params
+    elsif request.referrer.present? && URI.parse(request.referrer).host == request.host
+      config_params = (session[:index_config] || {}).with_indifferent_access
+    end
+
+    ratings_hash = config_params[:ratings] || params[:ratings] || {}
+
     @all_ratings = Movie.all_ratings
-    @ratings_to_show = params[:ratings]&.keys || []
-    @sort_by = params[:sort_by]
+    @ratings_to_show = ratings_hash.is_a?(Hash) ? ratings_hash.keys : Array(ratings_hash)
+    @sort_by = config_params[:sort_by] || params[:sort_by]
     @movies = Movie.with_ratings(@ratings_to_show, @sort_by)
   end
 
