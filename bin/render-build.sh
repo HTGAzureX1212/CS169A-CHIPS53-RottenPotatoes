@@ -8,4 +8,4 @@ bundle exec rails assets:clean
 
 # Run database migrations and seed data automatically on deploy
 bundle exec rails db:migrate
-bundle exec rails db:seed 
+bundle exec rails db:seed
